@@ -1,0 +1,170 @@
+{% include "templates/frontend/includes/header.html" %}
+{% include "templates/frontend/includes/nav.html" %}
+{% load static %} {% load humanize %} {% load cart %}
+
+
+<!-- main-area -->
+<main>
+
+<!-- breadcrumb-area -->
+<section class="breadcrumb-area d-flex align-items-center">
+<div class="container">
+<div class="row">
+    <div class="col-12">
+        <div class="breadcrumb-wrap text-center">
+            <h2>{{ post.product_title }}</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ post.product_title }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+</div>
+</section>
+<!-- breadcrumb-area-end -->
+
+<!-- product-area -->
+<section class="product-area gray-bg pt-120 pb-120">
+<div class="container">
+<div class="row">
+    <div class="col-lg-8">
+        <div class="product-details-wrap">
+            <div class="product-details-thumb">
+                <a href="#"><img width="300px" src="/media/{{ post.product_picture }}" alt="img"></a>
+            </div>
+            <div class="row">
+            {% for image in images %}
+            <div class="col-md-3">
+                <img width="200px" src="/media/{{ image.image }}" >
+            </div> 
+            {% endfor %}
+            </div>
+            <div class="product-details-tab">
+                <ul class="nav product-tab" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link btn active" id="item-details-tab" data-toggle="tab" href="#item-details" role="tab"
+                            aria-controls="item-details" aria-selected="true">Item Details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn" id="product-reviews-tab" data-toggle="tab" href="#product-reviews" role="tab"
+                            aria-controls="product-reviews" aria-selected="false">Reviews</a>
+                    </li>
+              
+                </ul>
+                <div class="tab-content product-tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="item-details" role="tabpanel" aria-labelledby="item-details-tab">
+                        <div class="product-details-content">
+                            <h3>{{ post.product_title }}</h3>
+                            <p>{{ post.product_description }}</p>
+                   
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="product-reviews" role="tabpanel" aria-labelledby="product-reviews-tab">
+                        <div class="item-comment-wrap">
+                            <div class="item-single-comment">
+                                <ul>
+                                    <li>
+                                        <div class="item-comment-avatar">
+                                            <a href="#"><img src="img/product/item_comment_avatar01.jpg" alt="img"></a>
+                                        </div>
+                                        <div class="item-comment-content">
+                                            <h5><a href="#">Noble Somto</a></h5>
+                                            <span>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </span>
+                                            <small>2 days ago</small>
+                                            <p>This a sample of the review sections</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                
+                            <div class="item-comment-box">
+                                <h3>Leave a Comment</h3>
+                                <div class="item-comment-form">
+                                    <form action="#">
+                                        <textarea name="message" id="message" placeholder="Your opinion *"></textarea>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <input type="text" placeholder="Your name">
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <input type="email" placeholder="Your Email *">
+                                            </div>
+                                        </div>
+                                        <button class="btn">Submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <aside class="vendor-profile-sidebar item-details-sidebar">
+            <h5 class="vendor-wrap-title">Product details</h5>
+            <div class="item-sidebar-action text-center">
+                <div class="item-price-count mb-25">
+                    <h4>{{post.product_price|intcomma|currency}}</h4>
+                </div>
+                <div class="item-sidebar-btn mb-25">
+                    {% if post|is_in_cart:request.session.cart %}
+                    <div class="row no-gutters">
+                        <form action="/page/add_cart" method="post" class="col-lg-2">
+                            {% csrf_token %}
+                            <input hidden type="text" value="{{post.prod_id}}" name="product">
+                            <input type="submit" value="-" class="btn btn-dark btn-block">
+                            <input hidden type="text" value="True" name="remove">
+                        </form>
+                        <div class=" text-center mt-2 text-red col">{{post|cart_quantity:request.session.cart}} in Cart</div>
+                        <form action="/page/add_cart" method="post" class="col-lg-2">
+                            {% csrf_token %}
+                            <input hidden type="text" value="{{post.prod_id}}" name="product">
+                            <input type="submit" value="+" class="btn btn-dark btn-block">
+                        </form>
+                    </div>
+                    {% else %}
+                    <form method="post" action="/page/add_cart">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{post.prod_id}}" name="product">
+                        <input type="submit" class="btn btn-primary btn-sm" value="Add to Cart">
+                    </form>
+                    {% endif %}
+                </div>
+                <div class="item-license">
+                   
+                </div>
+            </div>
+            <div class="vendor-info-wrap text-center">
+                <div class="vendor-thumb mb-10">
+                    <a href="#"><img width="200px" src="/media/{{ post.product_picture }}" alt="img"></a>
+                </div>
+                <div class="vendor-info mb-25">
+                    <h4>{{ post.product_title }}</h4>
+                    <span>{{ post.product_category }}</span>
+                </div>
+           
+            </div>
+          
+      
+        </aside>
+    </div>
+</div>
+</div>
+</section>
+<!-- product-area-end -->
+
+</main>
+<!-- main-area-end -->
+
+{% include "templates/frontend/includes/footer.html" %}

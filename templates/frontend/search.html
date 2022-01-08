@@ -1,0 +1,139 @@
+{% include "templates/frontend/includes/header.html" %}
+{% include "templates/frontend/includes/nav.html" %}
+{% load static %}
+{% load cart %}
+{% load humanize %} 
+<!-- main-area -->
+<main>
+
+<!-- breadcrumb-area -->
+<section class="breadcrumb-area d-flex align-items-center">
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="breadcrumb-wrap text-center">
+                <h2>Your One Stop Fashion store</h2>
+               
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+<!-- breadcrumb-area-end -->
+
+
+<!-- search-area -->
+<div class="gemas-search s-gemas-search">
+<div class="container">
+<div class="row">
+    <div class="col-12">
+        <div class="gemas-search-box">
+            <form action="search" method="post">
+                {% csrf_token %}
+                <input name="search" type="text" placeholder="Search for a product..." required>
+                <button><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- search-area-end -->
+
+<!-- product-area -->
+<section class="product-area s-product-area pt-40 pb-40">
+<div class="container">
+<div class="row">
+    {% for post in posts %}
+    <div class="col-lg-3 col-md-6">
+        <div class="product-item mb-40">
+            <div class="product-thumb">
+                <a href="#"><img src="media/{{ post.product_picture }}" alt=""></a>
+            </div>
+            <div class="product-item-content">
+                <div class="product-cat mb-10">
+                    <ul>
+                        <li><a href="#">{{ post.product_category }}</a></li>
+                        <li>{{ post.product_price|intcomma|currency }}</li> 
+                    </ul>
+                </div>
+            
+                <h4><a href="/page/product-details/{{ post.prod_id }}">{{ post.product_title}}</a></h4>
+                <p>{{ post.product_description }}</p>
+            </div>
+            <div class="product-meta">
+                <ul>
+                    <li>
+                        {% if post|is_in_cart:request.session.cart %}
+                        <div class="row no-gutters">
+                            <form action="/page/add_cart" method="post" class="col-lg-2">
+                                {% csrf_token %}
+                                <input hidden type="text" value="{{post.prod_id}}" name="product">
+                                <input type="submit" value="-" class="btn btn-dark btn-block">
+                                <input hidden type="text" value="True" name="remove">
+                            </form>
+                            <div class=" text-center mt-2 text-red col">{{post|cart_quantity:request.session.cart}} in Cart</div>
+                            <form action="/page/add_cart" method="post" class="col-lg-2">
+                                {% csrf_token %}
+                                <input hidden type="text" value="{{post.prod_id}}" name="product">
+                                <input type="submit" value="+" class="btn btn-dark btn-block">
+                            </form>
+                        </div>
+                        {% else %}
+                        <form method="post" action="/page/add_cart">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{post.prod_id}}" name="product">
+                            <input type="submit" class="btn btn-primary btn-sm" value="Add to Cart">
+                        </form>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    
+
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="pagination-wrap mt-30 text-center">
+            <nav>
+                <ul class="pagination">
+                    <span class="step-links">
+                        {% if posts.has_previous %}
+                            <li class="page-item"><a href="?page=1">&laquo; first</a></li>
+                            <li class="page-item"><a href="?page={{ posts.previous_page_number }}">previous</a></li>
+                        {% endif %}
+                
+                        <span class="ml-1 mr-2" style="padding-left: 20px; padding-right: 20px;">
+                            Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+                        </span>
+                
+                        {% if posts.has_next %}
+                            <li class="page-item"><a href="?page={{ posts.next_page_number }}">next</a></li>
+                            <li class="page-item"><a href="?page={{ posts.paginator.num_pages }}">last &raquo;</a></li>
+                        {% endif %}
+                    </span>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+</div>
+</section>
+<!-- product-area-end -->
+
+
+</main>
+<!-- main-area-end -->
+{% include "templates/frontend/includes/footer.html" %}

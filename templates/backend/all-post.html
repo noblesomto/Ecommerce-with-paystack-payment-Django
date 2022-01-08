@@ -1,0 +1,60 @@
+{% include "templates/backend/includes/header.html" %}
+{% include "templates/backend/includes/nav.html" %}
+{% load static %}
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Dashboard</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Default Table</h5>
+  
+                <!-- Default Table -->
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Title</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Category</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for post in posts %}
+                    <tr>
+                      <td>{{ post.product_title }}</td>
+                      <td>{{ post.product_price }}</td>
+                      <td>{{ post.product_category }}</td>
+                      <td><a class="btn btn-primary" href="/adminbackend/edit-post/{{ post.prod_id }}">Edit</a> | <a class="btn btn-danger" href="/adminbackend/delete-post/{{ post.prod_id }}">Delete</a> </td>
+                    </tr>
+                    {% endfor %}
+                   
+                  </tbody>
+                </table>
+                <!-- End Default Table Example -->
+              </div>
+            </div>
+            </div>
+        </div><!-- End Left side columns -->
+
+   
+
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+  {% include "templates/backend/includes/footer.html" %}

@@ -1,0 +1,67 @@
+{% include "templates/frontend/includes/header.html" %}
+{% include "templates/frontend/includes/nav.html" %}
+{% load static %}
+{% load cart %}
+{% load humanize %}
+
+
+<!-- main-area -->
+<main>
+
+<!-- breadcrumb-area -->
+<section class="breadcrumb-area d-flex align-items-center">
+<div class="container">
+<div class="row">
+<div class="col-12">
+<div class="breadcrumb-wrap text-center">
+    <h2>{{title}}</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+        </ol>
+    </nav>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- breadcrumb-area-end -->
+
+<!-- product-area -->
+<div class="product-area gray-bg pt-20 pb-120">
+<div class="container">
+<div class="row">
+<div class="col-lg-12 white-bg">
+    <div class="container text-white ">
+    <div class="p-5 m-5">
+        <div class="col-md-6 mx-auto pt-4 bg-dark">
+            <h3 class="text-white text-center pb-2">Check Out</h3>
+
+<form method="post" action="checkout">
+  {% csrf_token %}
+  
+  <input name="address" type="text" placeholder="Address" class="form-control">
+  <input name="phone" type="text" placeholder="Phone" class="form-control">
+  <input value="{{cart_product|total_cart_price:request.session.cart}}" type="hidden"> 
+
+  
+  <input type="submit" name="submit" value="Submit">
+</form>
+ 
+
+        </div>
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+<!-- product-area-end -->
+
+</main>
+<!-- main-area-end -->
+
+
+{% include "templates/frontend/includes/footer.html" %}

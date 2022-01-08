@@ -1,0 +1,48 @@
+<body onload="payWithPaystack()">
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script>
+    window.onload=function(){
+    payWithPaystack();
+    };
+    function payWithPaystack(){
+    var handler = PaystackPop.setup({
+    key: '{{ pk_public }}',
+    email:'{{email}}',
+    amount:'{{amount}}00',
+    currency: "NGN",
+    ref: '{{ ref }}',
+    metadata: {
+    custom_fields: [
+    {
+    display_name: "Mobile Number",
+    variable_name: "mobile_number",
+    value: "{{phone}}"
+    }
+    ]
+    },
+    callback: function(response){
+    //alert('success. transaction ref is ' + response.reference);
+    console.log(response.reference)
+    var referenceid = response.reference
+    $.ajax({
+        type: 'get',
+        url: '/page/verify/'+referenceid,
+        success: function(response) {
+            if (response[3].status == "success") {
+              window.location = "/page/payment-success";
+            }else{
+                window.location = "/page/cart";
+            }
+    	}
+    });
+    },
+    onClose: function(){
+    alert('window closed');
+    }
+    });
+    handler.openIframe();
+    }
+    </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</body>

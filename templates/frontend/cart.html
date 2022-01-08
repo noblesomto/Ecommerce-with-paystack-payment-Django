@@ -1,0 +1,83 @@
+{% include "templates/frontend/includes/header.html" %}
+{% include "templates/frontend/includes/nav.html" %}
+{% load static %}
+{% load cart %}
+{% load humanize %}
+
+
+<!-- main-area -->
+<main>
+
+<!-- breadcrumb-area -->
+<section class="breadcrumb-area d-flex align-items-center">
+<div class="container">
+<div class="row">
+<div class="col-12">
+<div class="breadcrumb-wrap text-center">
+    <h2>{{title}}</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+        </ol>
+    </nav>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- breadcrumb-area-end -->
+
+<!-- product-area -->
+<div class="product-area gray-bg pt-120 pb-120">
+<div class="container">
+<div class="row">
+<div class="col-lg-12 white-bg">
+<div class="forums-table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>S.N</th>
+                <th>Image</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in cart_product %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td><img class="rounded-circle" height="50px" src="{{i.product_picture.url}}" alt="img"></td>
+                <td><a href="#">{{i.product_title}}</a></td>
+                <td> {{i.product_price|intcomma|currency}} </td>
+                <td>{{i|cart_quantity:request.session.cart}}</td>
+                <td>{{i|total_price:request.session.cart |intcomma |currency}} </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <th colspan="4"></th>
+            <th>Total</th>
+            <th>{{cart_product|total_cart_price:request.session.cart|intcomma|currency}}</th>
+            </tfoot>
+    </table>
+    <hr style="background: white;">
+    <div class="mb-5">
+        <a href="/page/checkout" class="btn btn-primary float-right">Checkout</a>
+    </div>
+
+</div>
+</div>
+
+</div>
+</div>
+</div>
+<!-- product-area-end -->
+
+</main>
+<!-- main-area-end -->
+
+
+{% include "templates/frontend/includes/footer.html" %}
